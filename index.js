@@ -23,10 +23,10 @@ const airdropQty = "1000000000000000000000";
 const tokenContract = new ethers.Contract(contractAddress, abi, wallet);
 const walletAddress = wallet.getAddress();
 
-tokenContract.functions.balanceOf(walletAddress)
-  .then(({ balance }) => console.log("Balance: ", balance.toString()));
-
-provider.on(walletAddress, blockNumber => console.log("balance changed in block: ", blockNumber));
+// tokenContract.functions.balanceOf(walletAddress)
+//   .then(({ balance }) => console.log("Balance: ", balance.toString()));
+//
+// provider.on(walletAddress, blockNumber => console.log("balance changed in block: ", blockNumber));
 
 main();
 
@@ -44,10 +44,12 @@ async function main()
     console.log(e);
   }
 
-  fs.readFileSync('./addresses.txt').toString().split('\n')
-    .forEach((addr) =>
+  const buf = fs.readFileSync('./addresses.txt');
+
+  buf.toString().split('\n')
+    .some((addr) =>
       {
-        if (addr == '') break;
+        if (addr == '') return true;
         airdrop(addr, nonce);
         nonce = nonce + 1;
       });
@@ -56,7 +58,6 @@ async function main()
 // function to generate airdrop transaction from wallet file, prints mined tx when complete
 async function airdrop(address, nonce)
 {
-  console.log(nonce);
   const options =
   {
     gasLimit: 300000,

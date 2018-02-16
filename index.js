@@ -19,6 +19,8 @@ wallet.provider = provider;
 
 // set up airdrop quantity
 const airdropQty = "1000000000000000000000";
+// set time between api calls
+const duration = 0.1;
 
 const tokenContract = new ethers.Contract(contractAddress, abi, wallet);
 const walletAddress = wallet.getAddress();
@@ -45,14 +47,18 @@ async function main()
   }
 
   const buf = fs.readFileSync('./addresses.txt');
+  let index = 0;
 
   buf.toString().split('\n')
-    .some((addr) =>
+    .forEach((addr, index) =>
+    {
+      setTimeout(() =>
       {
-        if (addr == '') return true;
+        if (addr == '') return;
         airdrop(addr, nonce);
         nonce = nonce + 1;
-      });
+      }, index * duration * 1000);
+    });
 }
 
 // function to generate airdrop transaction from wallet file, prints mined tx when complete

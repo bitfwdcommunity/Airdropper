@@ -1,7 +1,5 @@
-const fs = require('fs');
 const ethers = require('ethers');
 const utils = ethers.utils;
-const BN = require('bn.js');
 const Wallet = ethers.Wallet;
 const providers = ethers.providers;
 const contract = ethers.contract;
@@ -19,12 +17,12 @@ const wallet = Wallet.fromMnemonic(config.seed);
 wallet.provider = provider;
 
 // set up airdrop quantity; currently 1000 per drop
-const airdropQty = "1000000000000000000000";
+const AIRDROP_QTY = "1000000000000000000000";
 // set time between api calls
-const duration = 0.1;
-const gasLimit = 300000;
-const gasPrice = 5000000000; // 5 gwei
-const startingIndex = -1;
+const DURATION = 0.1;
+const GAS_LIMIT = 300000;
+const GAS_PRICE = 5000000000; // 5 gwei
+const STARTING_INDEX = -1;
 
 const tokenContract = new ethers.Contract(contractAddress, abi, wallet);
 const walletAddress = wallet.getAddress();
@@ -54,16 +52,17 @@ async function main()
     let amount = calculateDrop();
     setTimeout(() =>
       {
-        if (index <= startingIndex) return;
+        if (index <= STARTING_INDEX) return;
         airdrop(index, address, nonce, amount);
         nonce = nonce + 1;
-      }, index * duration * 1000);
+      }, index * DURATION * 1000);
   })
 }
 
+// custom airdrop quantity calculator
 function calculateDrop()
 {
-  return airdropQty;
+  return AIRDROP_QTY;
 }
 
 // function to generate airdrop transaction from wallet file, prints mined tx when complete
@@ -71,8 +70,8 @@ async function airdrop(index, address, nonce, balance)
 {
   const options =
   {
-    gasLimit: gasLimit,
-    gasPrice: gasPrice,
+    gasLimit: GAS_LIMIT,
+    gasPrice: GAS_PRICE,
     nonce: nonce
   }
 

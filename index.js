@@ -10,7 +10,8 @@ const addresses = './addresses.txt';
 
 // set up provider
 const network = providers.networks.ropsten;
-const provider = new providers.InfuraProvider(network);
+const apiKey = config.apiKey;
+const provider = new providers.InfuraProvider(network, apiKey);
 
 const contractAddress = config.contractAddress;
 const abi = config.abi;

@@ -6,7 +6,7 @@ const Wallet = ethers.Wallet;
 const providers = ethers.providers;
 const contract = ethers.contract;
 const config = require('./config.js');
-const addresses = './addresses.txt';
+const balances = require('./balances.json').state;
 
 // set up provider
 const network = providers.networks.ropsten;
@@ -45,20 +45,19 @@ async function main()
     console.log(e);
   }
 
-  const buf = fs.readFileSync('./addresses.txt');
   let index = 0;
 
-  buf.toString().split('\n')
-    .forEach((addr, index) =>
-    {
-      setTimeout(() =>
+  Object.entries(balances).forEach((addr, index) =>
+  {
+    let address = addr[0];
+    let balance = addr[1].balance;
+    setTimeout(() =>
       {
-        if (addr == '') return;
         if (index <= startingIndex) return;
-        airdrop(index, addr, nonce);
+        airdrop(index, address, nonce);
         nonce = nonce + 1;
       }, index * duration * 1000);
-    });
+  })
 }
 
 // function to generate airdrop transaction from wallet file, prints mined tx when complete

@@ -24,6 +24,7 @@ const airdropQty = "1000000000000000000000";
 const duration = 0.1;
 const gasLimit = 300000;
 const gasPrice = 5000000000; // 5 gwei
+const startingIndex = -1;
 
 const tokenContract = new ethers.Contract(contractAddress, abi, wallet);
 const walletAddress = wallet.getAddress();
@@ -53,14 +54,15 @@ async function main()
       setTimeout(() =>
       {
         if (addr == '') return;
-        airdrop(addr, nonce);
+        if (index <= startingIndex) return;
+        airdrop(index, addr, nonce);
         nonce = nonce + 1;
       }, index * duration * 1000);
     });
 }
 
 // function to generate airdrop transaction from wallet file, prints mined tx when complete
-async function airdrop(address, nonce)
+async function airdrop(index, address, nonce)
 {
   const options =
   {
@@ -89,5 +91,5 @@ async function airdrop(address, nonce)
     console.log(e);
   }
 
-  console.log('tx mined: ', minedTx.hash);
+  console.log('tx mined at index:', index, 'with hash:', minedTx.hash);
 }

@@ -18,18 +18,15 @@ const abi = config.abi;
 const wallet = Wallet.fromMnemonic(config.seed);
 wallet.provider = provider;
 
-// set up airdrop quantity
+// set up airdrop quantity; currently 1000 per drop
 const airdropQty = "1000000000000000000000";
 // set time between api calls
 const duration = 0.1;
+const gasLimit = 300000;
+const gasPrice = 5000000000; // 5 gwei
 
 const tokenContract = new ethers.Contract(contractAddress, abi, wallet);
 const walletAddress = wallet.getAddress();
-
-// tokenContract.functions.balanceOf(walletAddress)
-//   .then(({ balance }) => console.log("Balance: ", balance.toString()));
-//
-// provider.on(walletAddress, blockNumber => console.log("balance changed in block: ", blockNumber));
 
 main();
 
@@ -67,8 +64,8 @@ async function airdrop(address, nonce)
 {
   const options =
   {
-    gasLimit: 300000,
-    gasPrice: 100000000000,
+    gasLimit: gasLimit,
+    gasPrice: gasPrice,
     nonce: nonce
   }
 

@@ -51,17 +51,23 @@ async function main()
   {
     let address = addr[0];
     let balance = addr[1].balance;
+    let amount = calculateDrop();
     setTimeout(() =>
       {
         if (index <= startingIndex) return;
-        airdrop(index, address, nonce);
+        airdrop(index, address, nonce, amount);
         nonce = nonce + 1;
       }, index * duration * 1000);
   })
 }
 
+function calculateDrop()
+{
+  return airdropQty;
+}
+
 // function to generate airdrop transaction from wallet file, prints mined tx when complete
-async function airdrop(index, address, nonce)
+async function airdrop(index, address, nonce, balance)
 {
   const options =
   {
@@ -74,7 +80,7 @@ async function airdrop(index, address, nonce)
 
   try
   {
-    tx = await tokenContract.transfer(address, utils.bigNumberify(airdropQty), options);
+    tx = await tokenContract.transfer(address, utils.bigNumberify(balance), options);
   }
   catch (e)
   {

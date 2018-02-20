@@ -16,13 +16,12 @@ const abi = config.abi;
 const wallet = Wallet.fromMnemonic(config.seed);
 wallet.provider = provider;
 
-// set up airdrop quantity; currently 1000 per drop
 const AIRDROP_QTY = "1000000000000000000000";
-// set time between api calls
 const DURATION = 0.1;
 const GAS_LIMIT = 300000;
 const GAS_PRICE = 5000000000; // 5 gwei
 const STARTING_INDEX = -1;
+const INITIAL_TOKENS = "10000000000000000000000";
 
 const tokenContract = new ethers.Contract(contractAddress, abi, wallet);
 const walletAddress = wallet.getAddress();
@@ -33,10 +32,12 @@ main();
 async function main()
 {
   let nonce;
+  let sumBalance;
 
   try
   {
     nonce = await wallet.getTransactionCount();
+    sumBalance = await sumBalances();
   }
   catch(e)
   {
@@ -49,7 +50,7 @@ async function main()
   {
     let address = addr[0];
     let balance = addr[1].balance;
-    let amount = calculateDrop();
+    let amount = calculateDrop(balance, sumBalance);
     setTimeout(() =>
       {
         if (index <= STARTING_INDEX) return;
@@ -60,9 +61,27 @@ async function main()
 }
 
 // custom airdrop quantity calculator
-function calculateDrop()
+function calculateDrop(balance, sumBalance)
 {
-  return AIRDROP_QTY;
+  // const decimalPoints = 10000;
+  // const initialTokens = utils.bigNumberify(INITIAL_TOKENS);
+  // const bal = utils.bigNumberify(balance).mul(utils.bigNumberify(decimalPoints));
+  // const percentage = bal.div(sumBalance);
+  //
+  // const amount = percentage.mul(initialTokens).div(decimalPoints);
+  //
+  // return amount;
+  return utils.bigNumberify(AIRDROP_QTY);
+}
+
+function sumBalances()
+{
+  let sum = utils.bigNumberify(0);
+  Object.entries(balances).forEach((addr, index) =>
+  {
+    sum = sum.add(utils.bigNumberify(addr[1].balance));
+  })
+  return sum;
 }
 
 // function to generate airdrop transaction from wallet file, prints mined tx when complete
@@ -79,7 +98,7 @@ async function airdrop(index, address, nonce, balance)
 
   try
   {
-    tx = await tokenContract.transfer(address, utils.bigNumberify(balance), options);
+    tx = await tokenContract.transfer(address, balance, options);
   }
   catch (e)
   {

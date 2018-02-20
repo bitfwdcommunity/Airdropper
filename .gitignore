@@ -1,5 +1,5 @@
 **/config.js
 **/.DS_Store
-**/addresses.txt
 
 /node_modules
+**/balances.json

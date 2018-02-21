@@ -9,8 +9,6 @@ const balances = require('./balances.json').state;
 
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 
-// set up provider
-const apiKey = config.apiKey;
 const provider = new providers.JsonRpcProvider('http://localhost:8545', 'ropsten')
 
 const contractAddress = config.contractAddress;

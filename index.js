@@ -113,5 +113,5 @@ async function airdrop(index, address, nonce, balance)
     console.log(e);
   }
 
-  console.log('tx mined at index:', index, 'with hash:', minedTx.hash);
+  console.log('tx mined at index:', index, 'with hash:', minedTx.hash, 'and balance:', balance.toString());
 }

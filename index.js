@@ -3,8 +3,11 @@ const utils = ethers.utils;
 const Wallet = ethers.Wallet;
 const providers = ethers.providers;
 const contract = ethers.contract;
+const BigNumber = require('bignumber.js');
 const config = require('./config.js');
 const balances = require('./balances.json').state;
+
+BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 
 // set up provider
 const apiKey = config.apiKey;
@@ -20,7 +23,7 @@ const DURATION = 0.1;
 const GAS_LIMIT = 300000;
 const GAS_PRICE = 5000000000; // 5 gwei
 const STARTING_INDEX = -1;
-const INITIAL_TOKENS = "10000000000000000000000";
+const INITIAL_TOKENS = "1000000000000000000000000";
 
 const tokenContract = new ethers.Contract(contractAddress, abi, wallet);
 const walletAddress = wallet.getAddress();
@@ -62,14 +65,13 @@ async function main()
 // custom airdrop quantity calculator
 function calculateDrop(balance, sumBalance)
 {
-  // const decimalPoints = 10000;
-  // const initialTokens = utils.bigNumberify(INITIAL_TOKENS);
-  // const bal = utils.bigNumberify(balance).mul(utils.bigNumberify(decimalPoints));
-  // const percentage = bal.div(sumBalance);
+  // const initialTokens = new BigNumber(INITIAL_TOKENS);
+  // const bal = new BigNumber(balance);
+  // const sumBal = new BigNumber(sumBalance.toString());
+  // const percentage = bal.dividedBy(sumBalance);
+  // const amount = percentage.multipliedBy(initialTokens);
   //
-  // const amount = percentage.mul(initialTokens).div(decimalPoints);
-  //
-  // return amount;
+  // return utils.bigNumberify(amount.toString());
   return utils.bigNumberify(AIRDROP_QTY);
 }
 

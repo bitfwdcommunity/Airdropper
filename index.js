@@ -7,9 +7,8 @@ const config = require('./config.js');
 const balances = require('./balances.json').state;
 
 // set up provider
-const network = providers.networks.ropsten;
 const apiKey = config.apiKey;
-const provider = new providers.InfuraProvider(network, apiKey);
+const provider = new providers.JsonRpcProvider('http://localhost:8545', 'ropsten')
 
 const contractAddress = config.contractAddress;
 const abi = config.abi;

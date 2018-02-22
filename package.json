@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bignumber.js": "^6.0.0",
     "ethers": "^2.2.6"
   }
 }

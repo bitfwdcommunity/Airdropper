@@ -7,6 +7,7 @@ const BigNumber = require('bignumber.js');
 const config = require('./config.js');
 const balances = require('./balances.json').state;
 
+// disable converting to exponent form
 BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
 
 const provider = new providers.JsonRpcProvider('http://localhost:8545', 'ropsten')
@@ -34,6 +35,8 @@ async function main()
   let nonce;
   let sumBalance;
 
+  // get current account nonce &&
+  // calculate sum of account balances (in case you have a complex airdrop mechanism)
   try
   {
     nonce = await wallet.getTransactionCount();
@@ -46,6 +49,7 @@ async function main()
 
   let index = 0;
 
+  // send a tx with given amount every duration
   Object.entries(balances).forEach((addr, index) =>
   {
     let address = addr[0];
@@ -61,6 +65,10 @@ async function main()
 }
 
 // custom airdrop quantity calculator
+// the default function here sends 1000 tokens per tx
+// the commented out function attempts to send tokens based on the proportion
+// of total eth's the account has relative to other accounts
+// i.e. if you have 1% of the ETH, you will receive 1% of the tokens
 function calculateDrop(balance, sumBalance)
 {
   // const initialTokens = new BigNumber(INITIAL_TOKENS);
@@ -73,6 +81,7 @@ function calculateDrop(balance, sumBalance)
   return utils.bigNumberify(AIRDROP_QTY);
 }
 
+// sums up the total ether balance of the accounts that have been filtered out
 function sumBalances()
 {
   let sum = utils.bigNumberify(0);

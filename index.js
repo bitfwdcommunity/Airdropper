@@ -14,8 +14,6 @@ const provider = new providers.JsonRpcProvider('http://localhost:8545', 'ropsten
 
 const contractAddress = config.contractAddress;
 const abi = config.abi;
-const wallet = Wallet.fromMnemonic(config.seed);
-wallet.provider = provider;
 
 const AIRDROP_QTY = "1000000000000000000000";
 const DURATION = 0.1;
@@ -23,6 +21,18 @@ const GAS_LIMIT = 300000;
 const GAS_PRICE = 5000000000; // 5 gwei
 const STARTING_INDEX = -1;
 const INITIAL_TOKENS = "1000000000000000000000000";
+
+let wallet;
+if (config.seed)
+{
+  wallet = Wallet.fromMnemonic(config.seed);
+}
+else
+{
+  wallet = new Wallet("0x" + config.privateKey);
+}
+
+wallet.provider = provider;
 
 const tokenContract = new ethers.Contract(contractAddress, abi, wallet);
 const walletAddress = wallet.getAddress();

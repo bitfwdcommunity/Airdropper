@@ -83,7 +83,6 @@ function calculateDrop(balance, sumBalance)
 {
   // const initialTokens = new BigNumber(INITIAL_TOKENS);
   // const bal = new BigNumber(balance);
-  // const sumBal = new BigNumber(sumBalance.toString());
   // const percentage = bal.dividedBy(sumBalance);
   // const amount = percentage.multipliedBy(initialTokens);
   //
